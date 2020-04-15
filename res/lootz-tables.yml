@@ -1,0 +1,12 @@
+Legendary:
+  display: "{Y}Legendary"
+  lootz:
+    - IronWings
+
+Farmer:
+  display: "{g}Farmer"
+  filler: Wheat
+  lootz:
+    - CowEgg
+    - SheepEgg
+    - BeeEgg
