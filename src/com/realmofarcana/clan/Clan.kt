@@ -83,6 +83,22 @@ class Clan {
         else Chat.error(m.player!!, "You are not the owner of this clan.", "/clan leave")
     }
 
+    fun hearth (m: Member, targetName: String) {
+        val target = Member.fromName(targetName)
+
+        when {
+            target == null -> Chat.error(m.player, "That player doesn't exist.")
+            target.land == null -> Chat.error(m.player, "That player doesn't have any land to hearth to.")
+            !members.containsKey(target) -> Chat.error(m.player, "That player isn't in your clan.")
+            m.canHearth > 0 -> Chat.error(m.player, "You cannot hearth for another ${m.canHearth} seconds.")
+            else -> {
+                Chat.info(m.player, "Hearthing you to ${target.username}.")
+                m.player!!.teleport(target.land!!.hearth)
+                m.canHearth = m.rank.etherealCooldown
+            }
+        }
+    }
+
     fun printInfo(): String {
         var msg = "${Chat.title("{y}$name")}\n{a}Members{x}: "
 

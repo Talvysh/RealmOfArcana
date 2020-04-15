@@ -59,7 +59,12 @@ class ClanCommands: CommandExecutor {
                 }
 
                 /*==/ Hearth /==*/
-                
+                args[0].equals("hearth", true) -> {
+                    when (member.clan) {
+                        null -> Chat.error(sender, "You have no clan.")
+                        else -> member.clan!!.hearth(member, args[1])
+                    }
+                }
 
                 /*==/ ADMIN DISBAND /==*/
                 args[0].equals("disband", true) -> Clan.adminDisband(member, args[1])
