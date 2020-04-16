@@ -6,10 +6,6 @@ import com.realmofarcana.gate.Gate
 import com.realmofarcana.gate.GateCmd
 import com.realmofarcana.help.Help
 import com.realmofarcana.help.HelpCmd
-import com.realmofarcana.lootz.Lootz
-import com.realmofarcana.lootz.LootzContainer
-import com.realmofarcana.lootz.LootzCmd
-import com.realmofarcana.lootz.LootzEvents
 import com.realmofarcana.member.Member
 import com.realmofarcana.member.MemberCommands
 import com.realmofarcana.member.MemberEvents
@@ -38,7 +34,6 @@ class ROA: JavaPlugin() {
         Region.init()
         Gate.init()
         Clan.init()
-        Lootz.init()
 
         // Register events.
         server.pluginManager.registerEvents(MemberEvents(),this)
