@@ -2,9 +2,11 @@ package com.realmofarcana.member
 
 import com.realmofarcana.chat.Chat
 import com.realmofarcana.world.World
+import org.bukkit.NamespacedKey
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
+import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 
 class MemberCommands: CommandExecutor {
@@ -48,6 +50,17 @@ class MemberCommands: CommandExecutor {
                     }
                 }
                 else Chat.error(sender, Chat.ADMIN_COMMAND_ONLY)
+            }
+
+            label.equals("uenchant", true) -> {
+                try {
+                    val enchant = Enchantment.getByKey(NamespacedKey.minecraft(args[0]))!!
+                    val item = sender.inventory.itemInMainHand
+                    item.addUnsafeEnchantment(enchant, args[1].toInt())
+                    Chat.info(member.player, "Added an unsafe enchantment to this item: ${enchant.key.key}: ${args[1]}")
+                } catch (e: Exception) {
+                    Chat.error(member.player, "That enchantment doesn't exist.")
+                }
             }
 
             else -> Chat.error(sender, Chat.COMMAND_DOES_NOT_EXIST)

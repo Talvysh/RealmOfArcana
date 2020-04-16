@@ -42,6 +42,7 @@ class ROA: JavaPlugin() {
         // Register commands.
         this.getCommand("rank")!!.setExecutor(MemberCommands())
         this.getCommand("culling")!!.setExecutor(MemberCommands())
+        this.getCommand("uenchant")!!.setExecutor(MemberCommands())
 
         this.getCommand("gate")!!.setExecutor(GateCmd())
 
