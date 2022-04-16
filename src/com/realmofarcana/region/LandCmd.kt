@@ -19,7 +19,7 @@ class LandCmd : CommandExecutor {
         when (args.size) {
             0 -> {
                 if (member.land == null) {
-                    Chat.error(sender, "You do not have a land of your own.", "/land claim")
+                    Chat.error(sender, "You don't have any land of your own.", "/land claim")
                     return true
                 }
 

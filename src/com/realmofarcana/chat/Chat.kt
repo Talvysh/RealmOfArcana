@@ -74,9 +74,7 @@ object Chat {
         var message = "\n{GR}"
         for (i in 0..ChatPaginator.GUARANTEED_NO_WRAP_CHAT_PAGE_WIDTH-5)
             message += "-"
-        message += "{x}\n"
-
-        message += "$s{x}"
+        message += "{x}\n$s{x}"
 
         message += "\n{GR}"
         for (i in 0..ChatPaginator.GUARANTEED_NO_WRAP_CHAT_PAGE_WIDTH-5)

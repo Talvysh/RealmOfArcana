@@ -21,7 +21,10 @@ class MemberCommands: CommandExecutor {
             label.equals("member", true) -> {}
 
             label.equals("rank", true) -> {
+                if (args.size < 2) return false
+
                 val targetName = args[0]
+
                 val rankName = args[1]
 
                 if (!member.hasPerm("roa.admin.rank") && !sender.isOp) {

@@ -9,6 +9,7 @@ import com.realmofarcana.help.HelpCmd
 import com.realmofarcana.member.Member
 import com.realmofarcana.member.MemberCommands
 import com.realmofarcana.member.MemberEvents
+import com.realmofarcana.member.Rank
 import com.realmofarcana.region.LandCmd
 import com.realmofarcana.region.Region
 import com.realmofarcana.region.RegionCmd
@@ -30,10 +31,11 @@ class ROA: JavaPlugin() {
         instance = this
 
         Help.init()
+        Rank.init()
         Member.init()
         Region.init()
         Gate.init()
-        Clan.init()
+        //Clan.init()
 
         // Register events.
         server.pluginManager.registerEvents(MemberEvents(),this)
@@ -50,7 +52,7 @@ class ROA: JavaPlugin() {
         this.getCommand("land")!!.setExecutor(LandCmd())
         this.getCommand("bypass")!!.setExecutor(RegionCmd())
 
-        this.getCommand("clan")!!.setExecutor(ClanCommands())
+        //this.getCommand("clan")!!.setExecutor(ClanCommands())
         this.getCommand("?")!!.setExecutor(HelpCmd())
 
         World.start()

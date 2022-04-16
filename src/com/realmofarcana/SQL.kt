@@ -32,6 +32,6 @@ object SQL {
 
     fun connect () : Connection {
         Class.forName("com.mysql.jdbc.Driver")
-        return DriverManager.getConnection("jdbc:mysql://$host/$db?user=$user&password=$password")
+        return DriverManager.getConnection("jdbc:mysql://$host/$db?user=$user") //&password=$password
     }
 }
