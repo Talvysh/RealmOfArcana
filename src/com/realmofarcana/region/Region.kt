@@ -5,7 +5,6 @@ import com.realmofarcana.ROA
 import com.realmofarcana.member.Member
 import com.realmofarcana.SQL
 import com.realmofarcana.world.World
-import com.sun.org.apache.xpath.internal.operations.Bool
 import org.bukkit.ChatColor
 import org.bukkit.Chunk
 import org.bukkit.Location
@@ -24,9 +23,9 @@ class Region {
 
     var id = UUID.randomUUID().toString()
     var type : RegionType
-    var color = ChatColor.YELLOW.toString()
+    var color = ChatColor.YELLOW.toString() // Color used for the title displayed in chat
     var owner : Member? = null // QOL
-    var hearth : Location
+    var hearth : Location // The hearth location of the region
     val chunks = mutableListOf<SmartChunk>()
 
     val flags = mapOf(
@@ -163,14 +162,17 @@ class Region {
         with (SQL.connect()) {
             with (prepareStatement("SELECT * FROM chunks WHERE region=?")) {
                 setString(1, id)
+
                 val chunkResult = executeQuery()
+                // Go through each chunk from the query
                 while (chunkResult.next()) {
+                    // Add new chunk to list of chunks
                     chunks.add(SmartChunk(chunkResult.getString("world"), chunkResult.getInt("x"), chunkResult.getInt("z")))
                 }
-                chunkResult.close()
-                close()
+                chunkResult.close() // Close the current query
+                close() // Close the current prepared statement
             }
-            close()
+            close() // Close the connection to SQL
         }
 
         instances.add(this)

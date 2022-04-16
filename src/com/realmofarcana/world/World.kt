@@ -22,9 +22,9 @@ object World {
         cullingTitle.isVisible = true
 
         ROA.instance.server.onlinePlayers.forEach {
-            it.playSound(it.location, Sound.ENTITY_ZOMBIE_PIGMAN_ANGRY, 1.0f, 0.1f)
-            it.playSound(it.location, Sound.ENTITY_ZOMBIE_PIGMAN_ANGRY, 1.0f, 0.1f)
-            it.playSound(it.location, Sound.ENTITY_ZOMBIE_PIGMAN_ANGRY, 1.0f, 0.1f)
+            it.playSound(it.location, Sound.ENTITY_ZOGLIN_ANGRY, 1.0f, 0.1f)
+            it.playSound(it.location, Sound.ENTITY_ZOGLIN_ANGRY, 1.0f, 0.1f)
+            it.playSound(it.location, Sound.ENTITY_ZOGLIN_ANGRY, 1.0f, 0.1f)
         }
 
         Chat.event("§cThe Culling§f has begun!  Death & destruction begins, all land protection is turned off.")
