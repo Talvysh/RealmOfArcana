@@ -37,6 +37,7 @@ class MemberEvents: Listener {
                 ItemStack(Material.WHEAT_SEEDS, 16)
             )
 
+            Chat.event("Welcome ${member.username} to the server!")
         }
 
         member.player = e.player

@@ -8,10 +8,8 @@ import com.realmofarcana.clan.Clan
 import org.bukkit.Bukkit
 import org.bukkit.boss.BarColor
 import org.bukkit.boss.BarStyle
-import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import org.bukkit.permissions.PermissionAttachment
-import java.io.File
 import java.sql.ResultSet
 
 class Member {
@@ -31,6 +29,8 @@ class Member {
 
     var bypass = false // Region bypassing for admins
     var regionEdit : Region? = null // The current region being edited by an admin
+
+    var friends = mutableListOf<String>()
 
     var clanRequest : Clan? = null // Does the player have a clan request?
     var friendRequest : Member? = null // Does the player have a friend request?
@@ -68,6 +68,14 @@ class Member {
         permAttachment = null
     }
 
+    fun addFriend(other: Member) {
+
+    }
+
+    fun removeFriend(other: Member) {}
+
+    fun isFriend() {}
+
     fun landAvailable () : Boolean { return (land?.chunks?.size ?: 0) < rank.maxChunks }
 
     /*==/ REGISTER /==*/
@@ -88,6 +96,22 @@ class Member {
         username = r.getString("username")
         rank     = Rank.getByName(r.getString("rank"))
         crowns   = r.getInt("crowns")
+
+        with (SQL.connect()) {
+            with (prepareStatement("SELECT * FROM friends WHERE uuid=?")) {
+                setString(1, id)
+
+                val friendResult = executeQuery()
+                // Go through each chunk from the query
+                while (friendResult.next()) {
+                    // Add new chunk to list of chunks
+                    friends.add(friendResult.getString("other"))
+                }
+                friendResult.close() // Close the current query
+                close() // Close the current prepared statement
+            }
+            close() // Close the connection to SQL
+        }
 
         instances.add(this)
         println("...$username")

@@ -1,0 +1,29 @@
+Member:
+  tag: "[M]"
+  ethereal-cooldown: 1
+  max-chunks: 10
+  perms:
+    - roa.admin.rank
+    - roa.culling
+    - roa.gate
+    - roa.region
+Veteran:
+  tag: "[V]"
+  ethereal-cooldown: 1
+  max-chunks: 20
+  perms:
+    -
+  inherits: Member
+VIP:
+  tag: "[VIP]"
+Mod:
+  tag: "[Mod]"
+  perms:
+    - roa.ranks
+  inherits: VIP
+Admin:
+  tag: "[Admin]"
+  inherits: Mod
+Owner:
+  tag: "[O]"
+  inherits: Admin

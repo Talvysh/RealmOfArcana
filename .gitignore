@@ -1,4 +1,5 @@
 .idea/
-res/
+res/config.yml
 server/
 target/
+/out/

@@ -44,7 +44,7 @@ class HelpCmd : CommandExecutor {
             }
         }
 
-        Chat.error(sender, "Couldn't find a help page for that.", "/?")
+        Chat.error(sender, "Couldn't find a help page for that.", "/? <topic>")
         return true
     }
 }
