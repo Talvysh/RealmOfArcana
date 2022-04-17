@@ -1,5 +1,0 @@
-host: "localhost"
-db: "roa"
-user: "root"
-password: "pass"
-motd: "motd"

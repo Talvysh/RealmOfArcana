@@ -1,0 +1,2 @@
+# RealmOfArcana
+Custom Spigot server.
