@@ -20,6 +20,12 @@ class MemberCommands: CommandExecutor {
         when {
             label.equals("member", true) -> {}
 
+            label.equals("crowns", true) -> {
+                if (args.isEmpty()) {
+                    Chat.raw(member.player, "You have {Y}${member.crowns}{x} crowns.")
+                }
+            }
+
             label.equals("rank", true) -> {
                 if (args.size < 2) return false
 

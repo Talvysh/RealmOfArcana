@@ -1,5 +1,7 @@
 package com.realmofarcana
 
+import org.bukkit.ChatColor
+import org.bukkit.block.Sign
 import org.bukkit.configuration.file.YamlConfiguration
 import java.io.File
 
@@ -21,8 +23,8 @@ object Helper {
         return (Regex("[!@#\$%^&*(),.?\":{}|<>]").containsMatchIn(s))
     }
 
-    inline fun <reified T : Enum<T>> enumValueOfOrNull(name: String): T? {
-        return T::class.java.enumConstants.find { it.name == name }
+    inline fun <reified T : Enum<T>> toEnumOrNull(name: String): T? {
+        return enumValues<T>().find { it.name == name }
     }
 
     // QOL function
@@ -40,5 +42,14 @@ object Helper {
         val config = YamlConfiguration()
         config.load(file)
         return config
+    }
+
+    fun updateSignColors(sign: Sign) {
+        // Change any & character with § to format colors on signs
+        for (i in 0..sign.lines.size) {
+            var line = sign.lines[i]
+            line = ChatColor.translateAlternateColorCodes('&', line)
+            sign.setLine(i, line)
+        }
     }
 }

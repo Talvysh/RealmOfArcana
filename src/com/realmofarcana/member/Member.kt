@@ -140,6 +140,10 @@ class Member {
             return null
         }
 
+        fun fromPlayer(player: Player): Member? {
+            return fromID(player.uniqueId.toString())
+        }
+
         fun fromName (name: String): Member? {
             instances.forEach {
                 if (it.username.equals(name, true))

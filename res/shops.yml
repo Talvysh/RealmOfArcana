@@ -1,0 +1,14 @@
+FarmerJohn:
+  DisplayName: "Farmer John"
+  Location:
+    World: "Gaea"
+    x: 0
+    y: 0
+    z: 0
+  Buying:
+    - ItemMaterial:
+        count: 20
+        crowns: 20
+  Selling:
+  Reputation:
+    - ItemMaterial: 20

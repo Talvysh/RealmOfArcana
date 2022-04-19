@@ -19,7 +19,7 @@ class RegionCmd : CommandExecutor {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (sender !is Player) return false // Not from the command-line.
 
-        /* Member and perm check. */
+        // Get Member or return
         member = Member.fromPlayer(sender) ?: return true
         if (!member.hasPerm("roa.region")) {
             Chat.error(sender, Chat.ADMIN_COMMAND_ONLY)

@@ -10,11 +10,15 @@ object SQL {
     private val password = ROA.instance.config.getString("password")!!
     private val updates  = mutableListOf<String>()
 
+    // Set this to true if working on a test server.  Will save all data to YML files.
+    private val localOnly = false
+
     fun add (s: String) { updates.add(s) }
 
     fun addList (strings: List<String>) { updates.addAll(strings) }
 
     fun update () {
+        // Run updates on a new thread so that it doesn't slow the rest of the server down:
         Thread().run {
             with(connect()) {
                 updates.forEach {

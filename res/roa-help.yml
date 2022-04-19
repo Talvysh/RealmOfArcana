@@ -1,0 +1,5 @@
+Region:
+  Label: "Region"
+  Description: ""
+  Example: "/rg"
+  Related: "/rg claim"

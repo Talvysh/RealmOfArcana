@@ -14,6 +14,7 @@ import com.realmofarcana.region.LandCmd
 import com.realmofarcana.region.Region
 import com.realmofarcana.region.RegionCmd
 import com.realmofarcana.region.RegionEvents
+import com.realmofarcana.shop.SignShopEvents
 import com.realmofarcana.world.World
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
@@ -40,17 +41,18 @@ class ROA: JavaPlugin() {
         // Register events.
         server.pluginManager.registerEvents(MemberEvents(),this)
         server.pluginManager.registerEvents(RegionEvents(), this)
+        server.pluginManager.registerEvents(SignShopEvents(), this)
 
         // Register commands.
         this.getCommand("rank")!!.setExecutor(MemberCommands())
         this.getCommand("culling")!!.setExecutor(MemberCommands())
         this.getCommand("uenchant")!!.setExecutor(MemberCommands())
+        this.getCommand("crowns")!!.setExecutor(MemberCommands())
 
         this.getCommand("gate")!!.setExecutor(GateCmd())
 
         this.getCommand("region")!!.setExecutor(RegionCmd())
         this.getCommand("land")!!.setExecutor(LandCmd())
-        this.getCommand("bypass")!!.setExecutor(RegionCmd())
 
         //this.getCommand("clan")!!.setExecutor(ClanCommands())
         this.getCommand("?")!!.setExecutor(HelpCmd())

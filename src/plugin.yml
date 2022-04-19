@@ -5,6 +5,8 @@ main: com.realmofarcana.ROA
 api-version: 1.18
 
 commands:
+  crowns:
+    description: /? crowns
   rank:
     description: ranks
     usage: /rank
