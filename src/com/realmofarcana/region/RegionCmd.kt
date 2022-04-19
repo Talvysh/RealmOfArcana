@@ -21,6 +21,7 @@ class RegionCmd : CommandExecutor {
 
         // Get Member or return
         member = Member.fromPlayer(sender) ?: return true
+        // Check if member has the 'roa.region' permission:
         if (!member.hasPerm("roa.region")) {
             Chat.error(sender, Chat.ADMIN_COMMAND_ONLY)
             return true
@@ -38,6 +39,8 @@ class RegionCmd : CommandExecutor {
                     args[0].equals("bypass", true) -> bypass()
                     args[0].equals("save", true) -> save()
                     args[0].equals("list", true) -> list()
+                    args[0].equals("sethearth", true) -> setHearth()
+                    args[0].equals("hearth", true) -> hearth()
                     else -> Chat.error(sender, Chat.COMMAND_DOES_NOT_EXIST)
                 }
 
@@ -54,6 +57,23 @@ class RegionCmd : CommandExecutor {
             }
         }
         return true
+    }
+
+    private fun hearth() {
+        if (member.regionEdit == null) {
+            Chat.error(sender, "You must first select a region to edit!", "/region edit <name>")
+            return
+        }
+
+        sender.teleport(member.regionEdit!!.hearth)
+        Chat.info(sender, "Traveled the {a}{/}ethereal plane{x} to ${member.regionEdit!!.id}'s hearth.")
+    }
+
+    private fun setHearth() {
+        if (member.regionEdit == null) {
+            Chat.error(sender, "You must first select a region to edit!", "/region edit <name>")
+            return
+        }
     }
 
     private fun create() {
@@ -149,16 +169,18 @@ class RegionCmd : CommandExecutor {
     }
 
     private fun bypass() {
-        if (!member.hasPerm("roa.region")) {
-            Chat.error(sender, Chat.ADMIN_COMMAND_ONLY)
-            return
-        }
-
         member.bypass = !member.bypass
         Chat.info(sender, "Region bypass set to: {a}{/}${member.bypass}{x}.")
     }
 
     private fun save() {
-        // Save the current region edit, and exit out of edit mode.
+        if (member.regionEdit == null) {
+            Chat.error(sender, "You are not currently editing a region.")
+            return
+        }
+
+        member.regionEdit = null
+        member.bypass = false
+        Chat.info(sender, "You have exited region edit mode.")
     }
 }

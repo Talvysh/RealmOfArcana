@@ -28,10 +28,9 @@ commands:
     permission: roa.region
   land:
     usage: /land
-    permission: roa.land
-  bypass:
-    usage: /bypass
-    permission: roa.bypass
+  hearth:
+    description: Teleports you to your land's hearth location.
+    usage: /hearth
   "?":
     usage: /?
   member:

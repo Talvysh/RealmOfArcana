@@ -53,6 +53,7 @@ class ROA: JavaPlugin() {
 
         this.getCommand("region")!!.setExecutor(RegionCmd())
         this.getCommand("land")!!.setExecutor(LandCmd())
+        this.getCommand("hearth")!!.setExecutor(LandCmd())
 
         //this.getCommand("clan")!!.setExecutor(ClanCommands())
         this.getCommand("?")!!.setExecutor(HelpCmd())

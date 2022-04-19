@@ -1,6 +1,5 @@
 package com.realmofarcana.region
 
-import com.realmofarcana.chat.Chat
 import com.realmofarcana.member.Member
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
