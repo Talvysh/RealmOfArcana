@@ -17,10 +17,10 @@ class RegionCmd : CommandExecutor {
     var region: Region? = null
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
-        if (sender !is Player) return false
+        if (sender !is Player) return false // Not from the command-line.
 
         /* Member and perm check. */
-        member = Member.fromID(sender.uniqueId.toString()) ?: return true
+        member = Member.fromPlayer(sender) ?: return true
         if (!member.hasPerm("roa.region")) {
             Chat.error(sender, Chat.ADMIN_COMMAND_ONLY)
             return true
@@ -29,125 +29,136 @@ class RegionCmd : CommandExecutor {
         region = Region.fromChunk(sender.location.chunk)
         if (label.equals("region", true)) {
             when (args.size){
-                /* Region LIST */
-                0 -> {
-                    var message = Chat.title("{Y}Regions")
+                0 -> regionInfo()
 
-                    /* List all non-player regions. */
-                    Region.instances.forEach {
-                        if (it.type != RegionType.PLAYER) {
-                            message += "${it.id}, "
-                        }
-                    }
-
-                    Chat.raw(sender, message.removeRange(message.lastIndex-1, message.lastIndex))
-                }
-
-                /*==/ CLAIM /==*/
                 1 -> when {
-                    args[0].equals("claim", true) -> {
-                        if (member.regionEdit == null) {
-                            Chat.error(sender, "You must first select a region to edit!", "/region edit <name>")
-                            return true
-                        }
-
-                        member.regionEdit!!.addChunk(sender.location.chunk)
-                        Chat.info(sender, "Chunk {a}{/}claimed{x} for ${member.regionEdit!!.id}")
-                    }
-
-                    args[0].equals("unclaim", true) -> {
-                        if (member.regionEdit == null) {
-                            Chat.error(sender, "You must first select a region to edit!", "/region edit <name>")
-                            return true
-                        }
-
-                        member.regionEdit!!.removeChunk(sender.location.chunk)
-                        Chat.info(sender, "Chunk {r}{/}unclaimed{x} for ${member.regionEdit!!.id}")
-                    }
-
-                    args[0].equals("autoclaim", true) -> {
-
-                    }
+                    args[0].equals("claim", true) -> claim()
+                    args[0].equals("unclaim", true) -> unclaim()
+                    args[0].equals("autoclaim", true) -> autoclaim()
+                    args[0].equals("bypass", true) -> bypass()
+                    args[0].equals("save", true) -> save()
+                    args[0].equals("list", true) -> list()
                     else -> Chat.error(sender, Chat.COMMAND_DOES_NOT_EXIST)
                 }
 
                 2 -> when {
-                    // Select a Region for editing.
-                    args[0].equals("edit", true) -> {
-                        val targetName = args[1]
-                        val target = Region.fromId(targetName)
-
-                        if (target == null) {
-                            Chat.error(sender, "{y}$targetName{x}, doesn't exist.","/region create <name>")
-                            return true
-                        }
-
-                        member.regionEdit = target
-                        Chat.info(sender, "Set region editing to: ${target.getTitle()}.")
-                    }
-
-                    /* DESTROY */
-                    args[0].equals("destroy", true) -> {
-                        val targetName = args[1]
-                        val target = Region.fromId(targetName)
-
-                        if (target == null) {
-                            Chat.error(sender, "{y}$targetName{x}, doesn't exist.","/region create <name>")
-                            return true
-                        }
-
-                        target.destroy()
-                        Chat.info(sender, "{R}{+}Destroyed{x} {r}${target.id}{x}!")
-                    }
-
+                    args[0].equals("edit", true) -> edit()
+                    args[0].equals("destroy", true) -> destroy()
                     else -> Chat.error(sender, Chat.COMMAND_DOES_NOT_EXIST)
                 }
 
                 3 -> when {
-                    // Create a new region
-                    args[0].equals("create", true) -> {
-                        val type = args[1].toUpperCase()
-                        val id = args[2]
-
-                        val nameConflict = Region.fromId(id)
-                        val chunkConflict = Region.fromChunk(sender.location.chunk)
-
-                        when {
-                            nameConflict != null -> Chat.error(sender, "That region already exists.")
-
-                            chunkConflict != null -> Chat.error(sender, "You must stand in an unclaimed chunk before creating a new region.")
-
-                            else -> {
-                                try { // Type check
-                                    member.regionEdit = Region(RegionType.valueOf(type), sender.location.chunk, id)
-                                    Chat.info(sender, "Created a new region, ${member.regionEdit!!.getTitle()}, and set it to your current edit.")
-                                }
-                                catch (e: Exception) {
-                                    Chat.error(sender, "{r}$type{x} is not a type of region you can create.", "/region types")
-                                    e.printStackTrace()
-                                }
-                            }
-                        }
-                    }
+                    args[0].equals("create", true) -> create()
+                    else -> Chat.error(sender, Chat.COMMAND_DOES_NOT_EXIST)
                 }
             }
         }
-
-        else if (label.equals("bypass", true)) {
-            if (!member.hasPerm("roa.region")) {
-                Chat.error(sender, Chat.ADMIN_COMMAND_ONLY)
-                return true
-            }
-
-            member.bypass = !member.bypass
-            Chat.info(sender, "Region bypass set to: {a}{/}${member.bypass}{x}.")
-        }
-
         return true
     }
 
-    fun checkRegionEdit () : Boolean {
+    private fun create() {
+        val type = args[1].toUpperCase()
+        val id = args[2]
 
-        return false
+        val nameConflict = Region.fromId(id)
+        val chunkConflict = Region.fromChunk(sender.location.chunk)
+
+        when {
+            nameConflict != null -> Chat.error(sender, "That region already exists.")
+
+            chunkConflict != null -> Chat.error(sender, "You must stand in an unclaimed chunk before creating a new region.")
+
+            else -> {
+                try { // Type check
+                    member.regionEdit = Region(RegionType.valueOf(type), sender.location.chunk, id)
+                    Chat.info(sender, "Created a new region, ${member.regionEdit!!.getTitle()}, and set it to your current edit.")
+                }
+                catch (e: Exception) {
+                    Chat.error(sender, "{r}$type{x} is not a type of region you can create.", "/region types")
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
+
+    private fun destroy() {
+        val targetName = args[1]
+        val target = Region.fromId(targetName)
+
+        if (target == null) {
+            Chat.error(sender, "{y}$targetName{x}, doesn't exist.","/region create <name>")
+            return
+        }
+
+        target.destroy()
+        Chat.info(sender, "{R}{+}Destroyed{x} {r}${target.id}{x}!")
+    }
+
+    private fun edit() {
+        val targetName = args[1]
+        val target = Region.fromId(targetName)
+
+        if (target == null) {
+            Chat.error(sender, "{y}$targetName{x}, doesn't exist.","/region create <name>")
+            return
+        }
+
+        member.regionEdit = target
+        Chat.info(sender, "Set region editing to: ${target.getTitle()}.")
+    }
+
+    private fun regionInfo() {
+        TODO("Not yet implemented")
+    }
+
+    private fun claim() {
+        if (member.regionEdit == null) {
+            Chat.error(sender, "You must first select a region to edit!", "/region edit <name>")
+            return
+        }
+
+        member.regionEdit!!.addChunk(sender.location.chunk)
+        Chat.info(sender, "Chunk {a}{/}claimed{x} for ${member.regionEdit!!.id}")
+    }
+
+    private fun unclaim() {
+        if (member.regionEdit == null) {
+            Chat.error(sender, "You must first select a region to edit!", "/region edit <name>")
+            return
+        }
+
+        member.regionEdit!!.removeChunk(sender.location.chunk)
+        Chat.info(sender, "Chunk {r}{/}unclaimed{x} for ${member.regionEdit!!.id}")
+    }
+
+    private fun autoclaim() {
+        //TODO: implement autoclaiming while moving from chunk-to-chunk
+    }
+
+    private fun list() {
+        var message = Chat.title("{Y}Regions")
+
+        /* List all non-player regions. */
+        Region.instances.forEach {
+            if (it.type != RegionType.PLAYER) {
+                message += "${it.id}, "
+            }
+        }
+
+        Chat.raw(sender, message.removeRange(message.lastIndex-1, message.lastIndex))
+    }
+
+    private fun bypass() {
+        if (!member.hasPerm("roa.region")) {
+            Chat.error(sender, Chat.ADMIN_COMMAND_ONLY)
+            return
+        }
+
+        member.bypass = !member.bypass
+        Chat.info(sender, "Region bypass set to: {a}{/}${member.bypass}{x}.")
+    }
+
+    private fun save() {
+        // Save the current region edit, and exit out of edit mode.
     }
 }
