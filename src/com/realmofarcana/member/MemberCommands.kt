@@ -30,7 +30,6 @@ class MemberCommands: CommandExecutor {
                 if (args.size < 2) return false
 
                 val targetName = args[0]
-
                 val rankName = args[1]
 
                 if (!member.hasPerm("roa.admin.rank") && !sender.isOp) {
@@ -38,8 +37,7 @@ class MemberCommands: CommandExecutor {
                     return true
                 }
 
-                val target = Member.fromName(targetName)
-                when (target) {
+                when (val target = Member.fromName(targetName)) {
                     null -> Chat.error(sender, "Couldn't find that player.")
                     else -> target.setRank(member, rankName)
                 }

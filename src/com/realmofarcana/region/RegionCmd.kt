@@ -16,8 +16,12 @@ class RegionCmd : CommandExecutor {
 
     var region: Region? = null
 
-    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
-        if (sender !is Player) return false // Not from the command-line.
+    override fun onCommand(_sender: CommandSender, command: Command, _label: String, _args: Array<out String>): Boolean {
+        if (_sender !is Player) return false // Not from the command-line.
+
+        this.sender = _sender
+        this.label = _label
+        this.args = _args
 
         // Get Member or return
         member = Member.fromPlayer(sender) ?: return true

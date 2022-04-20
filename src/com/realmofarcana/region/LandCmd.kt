@@ -15,34 +15,38 @@ class LandCmd : CommandExecutor {
     lateinit var args: Array<out String>
     lateinit var member: Member
 
-    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
-        if (sender !is Player) return false
+    override fun onCommand(_sender: CommandSender, command: Command, _label: String, _args: Array<out String>): Boolean {
+        if (_sender !is Player) return false
+
+        this.sender = _sender
+        this.label = _label
+        this.args = _args
 
         member = Member.fromID(sender.uniqueId.toString()) ?: return false
 
-        if (label.equals("hearth", true)) hearth()
+        when {
+            label.equals("hearth", true) -> hearth()
+            label.equals("land", true) -> {
+                when (args.size) {
+                    0 -> landInfo()
 
-        when (args.size) {
-            0 -> landInfo()
+                    1 -> {
+                        when {
+                            args[0].equals("claim", true) -> claim()
+                            args[0].equals("unclaim", true) -> unclaim()
+                            args[0].equals("sethearth", true) -> setHearth()
+                            else -> Chat.info(sender, Chat.COMMAND_DOES_NOT_EXIST)
+                        }
+                    }
 
-            1 -> {
-                when {
-                    args[0].equals("claim", true) -> claim()
-                    args[0].equals("unclaim", true) -> unclaim()
-                    args[0].equals("sethearth", true) -> setHearth()
                     else -> Chat.info(sender, Chat.COMMAND_DOES_NOT_EXIST)
                 }
             }
-
-            else -> Chat.info(sender, Chat.COMMAND_DOES_NOT_EXIST)
         }
         return true
     }
 
     fun landInfo() {
-        // If we're editing a region, we want it to be handled elsewhere
-        if (member.regionEdit != null) return
-
         if (member.land == null) {
             Chat.error(sender, "You don't have any land of your own.", "/land claim")
             return
@@ -58,9 +62,6 @@ class LandCmd : CommandExecutor {
     }
 
     fun claim() {
-        // If we're editing a region, we want it to be handled elsewhere
-        if (member.regionEdit != null) return
-
         val target = Region.fromChunk(sender.location.chunk)
 
         // Check that target chunk is not owned
@@ -88,9 +89,6 @@ class LandCmd : CommandExecutor {
     }
 
     fun unclaim() {
-        // If we're editing a region, we want it to be handled elsewhere
-        if (member.regionEdit != null) return
-
         if (member.land == null){
             Chat.info(sender, "You have no land to unclaim.")
             return
@@ -110,9 +108,6 @@ class LandCmd : CommandExecutor {
     }
 
     fun hearth() {
-        // If we're editing a region, we want it to be handled elsewhere
-        if (member.regionEdit != null) return
-
         if (member.land == null) {
             Chat.error(sender, "You do not have a land of your own.", "/land claim")
             return
@@ -135,9 +130,6 @@ class LandCmd : CommandExecutor {
     }
 
     fun setHearth() {
-        // If we're editing a region, we want it to be handled elsewhere
-        if (member.regionEdit != null) return
-
         if (member.land == null) {
             Chat.error(sender, "You do not have a land of your own.", "/land claim")
             return

@@ -19,7 +19,7 @@ Mod:
   max-chunks: 99
   perms:
     - roa.culling
-    - roa.ranks
+    - roa.admin.rank
   inherits: VIP
 Admin:
   tag: "[Admin]"
